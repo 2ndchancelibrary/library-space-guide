@@ -265,27 +265,53 @@ At SCL, records are not control. They are small traces that a person has begun r
 </div>
 <footer class="footer"><div class="footer-logo">Second Chance Library</div><p data-ko="(사) 세상을품은아이들 · SEPUMA<br>도서문화재단 씨앗 지원" data-en="SEPUMA · Second Chance for the Youth<br>Supported by SIAT Foundation">(사) 세상을품은아이들 · SEPUMA<br>도서문화재단 씨앗 지원</p></footer>
 <script>
-
 const T=11; let cz=0, cl='ko';
 const ps={};
-function initState(){for(let i=0;i<T;i++){const s=document.getElementById('slides-'+i);ps[i]={cur:0,total:s?s.querySelectorAll('.photo-slide').length:1};}}
-function parseHash(){const h=window.location.hash;if(h){const i=parseInt(h.replace('#zone-',''));if(!isNaN(i)&&i>=0&&i<T)return i;}return 0;}
-function initDots(){const c=document.getElementById('zoneDots');for(let i=0;i<T;i++){const d=document.createElement('button');d.className='zone-dot'+(i===0?' active':'');d.onclick=()=>navigate(i);c.appendChild(d);}}
+
+function initState(){
+  for(let i=0;i<T;i++){
+    const s=document.getElementById('slides-'+i);
+    ps[i]={cur:0,total:s?s.querySelectorAll('.photo-slide').length:1};
+  }
+}
+
+function parseHash(){
+  const h=window.location.hash;
+  if(h){const i=parseInt(h.replace('#zone-',''));if(!isNaN(i)&&i>=0&&i<T)return i;}
+  return 0;
+}
+
+function initDots(){
+  const c=document.getElementById('zoneDots');
+  for(let i=0;i<T;i++){
+    const d=document.createElement('button');
+    d.className='zone-dot'+(i===0?' active':'');
+    d.onclick=()=>navigate(i);
+    c.appendChild(d);
+  }
+}
+
 function showZone(i){
-  i=parseInt(i);cz=i;
+  i=parseInt(i); cz=i;
   document.querySelectorAll('.zone-card').forEach(c=>c.classList.remove('active'));
-  const t=document.getElementById('zone-'+i);if(t)t.classList.add('active');
+  const t=document.getElementById('zone-'+i);
+  if(t) t.classList.add('active');
   document.querySelectorAll('.zone-dot').forEach((d,j)=>d.classList.toggle('active',j===i));
   window.location.hash='zone-'+i;
   const sw=document.querySelector('.selector-wrapper');
   window.scrollTo({top:sw.offsetTop-60,behavior:'smooth'});
   updateSelectLabel(i);
 }
-function navigate(i){if(i>=0&&i<T)showZone(i);}
+
+function navigate(i){
+  if(i>=0&&i<T) showZone(i);
+}
+
 function toggleDropdown(){
   document.getElementById('selectBtn').classList.toggle('open');
   document.getElementById('selectDropdown').classList.toggle('open');
 }
+
 function selectZone(idx,el){
   document.querySelectorAll('.select-option').forEach(o=>o.classList.remove('selected'));
   el.classList.add('selected');
@@ -293,11 +319,13 @@ function selectZone(idx,el){
   document.getElementById('selectDropdown').classList.remove('open');
   showZone(idx);
 }
+
 function updateSelectLabel(idx){
   const opts=document.querySelectorAll('.select-option');
   const label=opts[idx]?opts[idx].getAttribute('data-'+cl):'';
   document.getElementById('selectLabel').textContent=label||opts[idx]?.textContent||'';
 }
+
 document.addEventListener('click',e=>{
   const cs=document.getElementById('customSelect');
   if(cs&&!cs.contains(e.target)){
@@ -305,18 +333,20 @@ document.addEventListener('click',e=>{
     document.getElementById('selectDropdown').classList.remove('open');
   }
 });
+
 function slidePhoto(zoneIdx,dir){
   const s=ps[zoneIdx];
   s.cur=Math.max(0,Math.min(s.total-1,s.cur+dir));
   const slides=document.getElementById('slides-'+zoneIdx);
-  if(slides)slides.style.transform=`translateX(-${s.cur*100}%)`;
+  if(slides) slides.style.transform=`translateX(-${s.cur*100}%)`;
   const dots=document.getElementById('dots-'+zoneIdx);
-  if(dots)dots.querySelectorAll('.photo-dot').forEach((d,i)=>d.classList.toggle('active',i===s.cur));
+  if(dots) dots.querySelectorAll('.photo-dot').forEach((d,i)=>d.classList.toggle('active',i===s.cur));
   const prev=document.getElementById('prev-'+zoneIdx);
   const next=document.getElementById('next-'+zoneIdx);
-  if(prev)prev.disabled=s.cur===0;
-  if(next)next.disabled=s.cur===s.total-1;
+  if(prev) prev.disabled=s.cur===0;
+  if(next) next.disabled=s.cur===s.total-1;
 }
+
 function setLang(l){
   cl=l;
   document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent.trim()===(l==='ko'?'한국어':'EN')));
@@ -325,12 +355,14 @@ function setLang(l){
   document.querySelectorAll('[data-ko][data-en]').forEach(e=>{e.innerHTML=e.getAttribute('data-'+l);});
   document.querySelectorAll('.select-option').forEach(o=>{o.textContent=o.getAttribute('data-'+l);});
   updateSelectLabel(cz);
-});
-  document.querySelectorAll('.select-option').forEach(o=>{o.textContent=o.getAttribute('data-'+l);});
-  updateSelectLabel(cz);
 }
-document.addEventListener('DOMContentLoaded',()=>{initState();initDots();const i=parseHash();showZone(i);});
 
+document.addEventListener('DOMContentLoaded',()=>{
+  initState();
+  initDots();
+  const i=parseHash();
+  showZone(i);
+});
 </script>
 </body>
 </html>
